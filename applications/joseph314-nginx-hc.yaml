@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: joseph314-nginx-hc
+  finalizers:
+    - resources-finalizer.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: oci://registry-1.docker.io/bitnamicharts/nginx  # OCI registry path
+    targetRevision: 19.0.2  # Chart version
+    chart: nginx  # Chart name (only needed if repoURL points to a repo, not a full OCI path)
+    helm:
+      releaseName: nginx-hc
+      valueFiles:
+        - manifests/joseph314-nginx-hc/values.yaml  # Path relative to repo root
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: joseph314-ns
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
