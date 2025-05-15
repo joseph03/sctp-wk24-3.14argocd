@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: joseph314aa-nginx-hc
+  #finalizers:
+  #- resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: https://charts.bitnami.com/bitnami  # Helm chart source
+    #- repoURL: registry-1.docker.io/bitnamicharts
+      chart: nginx
+      targetRevision: 19.0.2
+      helm:
+        releaseName: nginx-hc
+        valueFiles:
+          - $values/manifests/joseph-nginx-hc/values.yaml
+          # if repoURL: https://charts.bitnami.com/bitnami  # Helm chart source
+          #- $values/values.yaml  # Error: open <path to cached source>/values.yaml: no such file or directory
+          #- values.yaml  # Failed to unmarshal "values.yaml": <nil>
+    - repoURL: https://github.com/joseph03/sctp-wk24-3.14argocd.git #https
+      targetRevision: HEAD     # latest commit
+      ref: values
+      #path: manifests/joseph-nginx-hc  # Directory containing values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: joseph314aa-ns
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true

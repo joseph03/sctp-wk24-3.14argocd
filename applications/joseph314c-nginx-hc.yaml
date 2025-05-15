@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: joseph314-nginx-hc
+  name: joseph314c-nginx-hc
   finalizers:
     - resources-finalizer.argoproj.io
 spec:
@@ -14,10 +14,14 @@ spec:
     helm:
       releaseName: nginx-hc
       valueFiles:
-        - manifests/joseph-nginx-hc/values.yaml  # Path relative to repo root
+        #- /manifests/joseph-nginx-hc/values2.yaml  # Path relative to repo root
+        - $values/manifests/joseph-nginx-hc/values.yaml
+    repoURL: https://github.com/slim-sandbox/argocd-demo.git   #git@github.com:joseph03/sctp-wk24-3.14argocd.git  #
+    #targetRevision: HEAD
+    ref: values
   destination:
     server: https://kubernetes.default.svc
-    namespace: joseph314-ns
+    namespace: joseph314c-ns
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

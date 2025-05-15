@@ -1,0 +1,56 @@
+# manifests/joseph314-nginx-hc/values.yaml
+
+# Basic Nginx Configuration
+image:
+  registry: docker.io
+  repository: bitnami/nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Service Configuration
+service:
+  type: ClusterIP  # For internal access (use LoadBalancer for external)
+  port: 80
+  targetPort: http
+
+# Ingress (disabled by default)
+ingress:
+  enabled: false
+
+# Custom HTML page for testing
+serverBlock: |-
+  server {
+    listen 0.0.0.0:8080;
+    root /app;
+    index index.html;
+    location / {
+      try_files $uri $uri/ =404;
+    }
+  }
+
+# Mount a custom index.html
+volumeMounts:
+  - name: custom-content
+    mountPath: /app
+
+volumes:
+  - name: custom-content
+    configMap:
+      name: nginx-html-content
+
+# Create a ConfigMap with a test HTML page
+extraManifests:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: nginx-html-content
+    data:
+      index.html: |
+        <!DOCTYPE html>
+        <html>
+        <head><title>ArgoCD-Nginx Test</title></head>
+        <body>
+          <h1>Hello from ArgoCD!</h1>
+          <p>Successfully deployed Nginx via Helm.</p>
+        </body>
+        </html>

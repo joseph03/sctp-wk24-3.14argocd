@@ -1,0 +1,16 @@
+## Default values for nginx
+## Ref: https://github.com/bitnami/charts/blob/main/bitnami/nginx/values.yaml
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: http
+
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi

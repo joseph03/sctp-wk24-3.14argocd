@@ -1,23 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: joseph314a-nginx-hc
-  finalizers:
-    - resources-finalizer.argoproj.io
+  name: joseph314b-nginx-hc
 spec:
   project: default
-  source:
-    #repoURL: oci://registry-1.docker.io/bitnamicharts/nginx  # error. OCI registry path
-    repoURL: https://charts.bitnami.com/bitnami  # Official Helm repo
-    targetRevision: 19.0.2  # Chart version
-    chart: nginx  # Chart name (only needed if repoURL points to a repo, not a full OCI path)
-    helm:
-      releaseName: nginx-hc
-      valueFiles:
-        - manifests/joseph314-nginx-hc/values.yaml  # Path relative to repo root
+  sources:
+    - repoURL: https://charts.bitnami.com/bitnami  # Helm chart source
+      chart: nginx
+      targetRevision: 19.0.2
+      helm:
+        releaseName: nginx-hc
+        valueFiles:
+          - $values/values.yaml  # Path relative to values source root
+    - repoURL: https://github.com/joseph03/sctp-wk24-3.14argocd.git #https
+      # Error: open /tmp/f537d1f2-86cb-43b7-8133-f17f90fe634c/nginx/manifests/joseph-nginx-hc/values.yaml: 
+      # no such file or directory
+      ref: values
+      path: manifests/joseph-nginx-hc  # Directory containing values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: joseph314a-ns
+    namespace: joseph314b-ns
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
