@@ -22,7 +22,7 @@ spec:
     # Error: invalid chart URL format: git@github.com:joseph03/sctp-wk24-3.14argocd.git
     # Error: looks like "https://github.com/slim-sandbox/argocd-demo.git" is not a valid chart repository or 
     # cannot be reached: failed to fetch https://github.com/slim-sandbox/argocd-demo.git/index.yaml : 404 Not Found
-    targetRevision: main #invalid revision 'main': improper constraint: main
+    targetRevision: test #invalid revision 'main': improper constraint: main
     #targetRevision: HEAD #Unknown desc = invalid revision 'HEAD': improper constraint: HEAD
     path: . #added
     ref: values
