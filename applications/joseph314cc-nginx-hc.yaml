@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: joseph314cc-nginx-hc
+  finalizers:
+    - resources-finalizer.argoproj.io
+spec:
+  project: default
+  source:
+    #repoURL: oci://registry-1.docker.io/bitnamicharts/nginx  # error. OCI registry path
+    repoURL: https://charts.bitnami.com/bitnami  # Official Helm repo
+    targetRevision: 19.0.2  # Chart version
+    chart: nginx  # Chart name (only needed if repoURL points to a repo, not a full OCI path)
+    helm:
+      releaseName: nginx-hc
+      valueFiles:
+        #- /manifests/joseph-nginx-hc/values2.yaml  # Path relative to repo root
+        - $values/manifests/joseph-nginx-hc/values.yaml
+    repoURL: "git@github.com:joseph03/sctp-wk24-3.14argocd.git" 
+    # Error: invalid chart URL format: git@github.com:joseph03/sctp-wk24-3.14argocd.git
+    # Error: looks like "https://github.com/joseph03/sctp-wk24-3.14argocd.git" is not a valid chart repository
+    # Error: invalid chart URL format: git@github.com:joseph03/sctp-wk24-3.14argocd.git
+    # Error: looks like "https://github.com/slim-sandbox/argocd-demo.git" is not a valid chart repository or 
+    # cannot be reached: failed to fetch https://github.com/slim-sandbox/argocd-demo.git/index.yaml : 404 Not Found
+    targetRevision: main #invalid revision 'main': improper constraint: main
+    #targetRevision: HEAD #Unknown desc = invalid revision 'HEAD': improper constraint: HEAD
+    path: . #added
+    ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: joseph314cc-ns
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
