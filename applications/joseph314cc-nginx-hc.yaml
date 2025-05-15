@@ -7,6 +7,7 @@ metadata:
 spec:
   project: default
   source:
+    # can apply successfully
     repoURL: git@github.com:joseph03/sctp-wk24-3.14argocd.git
     targetRevision: main  # or your actual branch name (not HEAD)
     path: manifests/joseph-nginx-hc
