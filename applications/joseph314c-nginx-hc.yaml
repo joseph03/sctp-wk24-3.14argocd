@@ -14,12 +14,16 @@ spec:
      releaseName: nginx-hc
      valueFiles:
      - $values/manifests/joseph-nginx-hc/values.yaml
+   # if values.yaml is used: Failed sync attempt to : one or more objects failed to apply, 
+   # reason: admission webhook "validate.nginx.ingress.kubernetes.io" denied the request: 
+   # host "nginx-hc.sctp-sandbox.com" and path "/" is already defined in ingress demo/nginx-hc
  - repoURL: "git@github.com:joseph03/sctp-wk24-3.14argocd.git" 
    targetRevision: main
    ref: values
  destination:
    server: https://kubernetes.default.svc
-   namespace: demo #joseph314c-ns
+   #namespace: demo #work 
+   namespace: joseph314c-ns  # work
  syncPolicy:
    syncOptions:
      - CreateNamespace=true
